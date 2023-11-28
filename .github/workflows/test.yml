@@ -1,0 +1,33 @@
+name: Test
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: ["*"]
+  schedule:
+    - cron: "0 5 1,15 * *"
+
+defaults:
+  run:
+    shell: bash -e {0} # -e to fail on error
+
+jobs:
+  test:
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ["3.10", "3.12"]
+        os: [ubuntu-latest]
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python ${{ matrix.python }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python }}
+          cache: pip
+      - run: pip install -e .[test]
+      - run: pytest -vv --color=yes
