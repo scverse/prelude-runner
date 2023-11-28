@@ -1,0 +1,29 @@
+[project]
+name = "prelude-runner"
+dynamic = ["version"]
+dependencies = ["nbclient"]
+
+[project.scripts]
+prelude-runner = "prelude_runner.cli:main"
+
+[project.optional-dependencies]
+test = [
+    "pytest",
+    "coverage",
+    "ipykernel",
+    # Seed resets
+    "numpy",
+    #"pytorch",  # Too big to test?
+]
+
+[tool.hatch.version]
+source = "vcs"
+
+[tool.hatch.envs.test]
+features = ["test"]
+[tool.hatch.envs.test.scripts]
+run = "pytest -vv {args}"
+
+[build-system]
+requires = ["hatchling", "hatch-vcs"]
+build-backend = "hatchling.build"

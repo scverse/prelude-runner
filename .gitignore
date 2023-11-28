@@ -1,0 +1,16 @@
+# Caches
+__pycache__/
+.ipynb_checkpoints/
+/*cache/
+/data/
+/write/
+
+# Build artifacts
+/dist/
+
+# Unit test / coverage reports
+/.coverage
+/coverage.*
+
+# Virtual environments
+*venv/
