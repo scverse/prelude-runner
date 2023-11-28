@@ -4,8 +4,8 @@
    :target: https://pypi.org/project/prelude-runner/
    :alt: PyPI Version
 
-.. |tests| image:: https://github.com/theislab/anndata2ri/actions/workflows/test.yml/badge.svg
-   :target: https://github.com/theislab/anndata2ri/actions/workflows/test.yml
+.. |tests| image:: https://github.com/scverse/prelude-runner/actions/workflows/test.yml/badge.svg
+   :target: https://github.com/scverse/prelude-runner/actions/workflows/test.yml
    :alt: Unit Tests
 
 prelude-runner
