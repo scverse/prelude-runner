@@ -31,7 +31,7 @@ class Output(Protocol):
     data: dict[str, str]
 
 
-class Stream(Protocol):
+class Stream(Output, Protocol):
     """One type of output from a code cell."""
 
     output_type: Literal["stream"]

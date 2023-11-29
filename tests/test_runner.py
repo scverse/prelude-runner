@@ -9,7 +9,7 @@ from nbclient.exceptions import CellExecutionError
 from nbformat import v4
 from prelude_runner.cli import load_preludes, main
 from prelude_runner.core import Preludes, execute
-from prelude_runner.types import CodeCell, Notebook
+from prelude_runner.types import CodeCell, Notebook, Stream
 
 tests_dir = Path(__file__).parent
 preludes_dir = tests_dir / "data/config"
@@ -21,8 +21,13 @@ def preludes() -> Preludes:
     return load_preludes(preludes_dir)
 
 
+def mk_code_nb(source: str) -> Notebook:
+    cell = cast(CodeCell, v4.new_code_cell(cell_type="code", source=source))
+    return cast(Notebook, v4.new_notebook(cells=[cell]))
+
+
 @pytest.mark.parametrize(
-    ("code", "expected"),
+    ("source", "expected"),
     [
         pytest.param("import random; print(random.randint(0, 10))", "6", id="stdlib"),
         pytest.param(
@@ -32,24 +37,20 @@ def preludes() -> Preludes:
         ),
     ],
 )
-def test_execute(preludes: Preludes, code: str, expected: str) -> None:
-    cell: CodeCell = v4.new_code_cell(cell_type="code", source=code)
-    nb: Notebook = v4.new_notebook(cells=[cell])
+def test_execute(preludes: Preludes, source: str, expected: str) -> None:
+    nb = mk_code_nb(source)
     execute(nb, preludes)
-    assert cell.outputs[0].text.strip() == expected
+    cell = cast(CodeCell, nb.cells[0])
+    stream = cast(Stream, cell.outputs[0])
+    assert stream.text.strip() == expected
 
 
 def test_traceback_intact(preludes: Preludes) -> None:
     """Tests that the traceback reports the same line and cell numbers."""
-
-    def mk_nb() -> Notebook:
-        cell = cast(CodeCell, v4.new_code_cell(cell_type="code", source="1/0"))
-        return cast(Notebook, v4.new_notebook(cells=[cell]))
-
     with pytest.raises(CellExecutionError) as exc_rr:
-        execute(mk_nb(), preludes)
+        execute(mk_code_nb("1/0"), preludes)
     with pytest.raises(CellExecutionError) as exc_orig:
-        nbclient.execute(mk_nb())
+        nbclient.execute(mk_code_nb("1/0"))
     assert exc_rr.value.traceback == exc_orig.value.traceback
 
 
