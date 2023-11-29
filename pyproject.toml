@@ -1,6 +1,7 @@
 [project]
 name = "prelude-runner"
 dynamic = ["version"]
+requires-python = ">=3.11"
 dependencies = ["nbclient"]
 
 [project.scripts]
@@ -19,7 +20,7 @@ test = [
 source = "vcs"
 
 [tool.hatch.envs.test]
-python = "3.12"
+python = "3.11"
 features = ["test"]
 [tool.hatch.envs.test.scripts]
 run = "pytest -vv {args}"
