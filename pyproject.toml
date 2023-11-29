@@ -13,7 +13,6 @@ test = [
     "ipykernel",
     # Seed resets
     "numpy",
-    #"pytorch",  # Too big to test?
 ]
 
 [tool.hatch.version]

@@ -12,11 +12,13 @@ if TYPE_CHECKING:
     from prelude_runner.types import CodeCell, Notebook
 
 tests_dir = Path(__file__).parent
+preludes_dir = tests_dir / "data/config"
+nbs_dir = tests_dir / "data/notebooks"
 
 
 @pytest.fixture(scope="session")
 def preludes() -> Preludes:
-    return load_preludes(tests_dir / "data/config")
+    return load_preludes(preludes_dir)
 
 
 @pytest.mark.parametrize(
@@ -53,5 +55,4 @@ def test_traceback_intact(preludes: Preludes) -> None:
 
 
 def test_cli() -> None:
-    nb_path = tests_dir / "data/notebooks"
-    main([nb_path])
+    main([f"--preludes={preludes_dir}", str(nbs_dir)])

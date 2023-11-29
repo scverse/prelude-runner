@@ -31,8 +31,10 @@ class Args(Protocol):
 def parse_args(argv: Sequence[str] | None = None) -> Args:
     """Parse command line arguments."""
     parser = ArgumentParser()
-    parser.add_argument("--preludes", type=Path, help="Path to prelude directory")
-    parser.add_argument("nb-path", type=Path, help="Path to notebook directory")
+    parser.add_argument(
+        "--preludes", type=Path, help="Path to prelude directory", required=True
+    )
+    parser.add_argument("nb_path", type=Path, help="Path to notebook directory")
     return parser.parse_args(argv)
 
 
