@@ -15,11 +15,11 @@ if TYPE_CHECKING:
     from .types import Notebook
 
 
-def load_preludes(d: Path) -> Preludes:
+def load_preludes(d: Path, *, suffix: str) -> Preludes:
     """Load prelude code from config directory."""
     return Preludes(
-        notebook=(d / "prelude_notebook.py").read_text(),
-        cell=(d / "prelude_cell.py").read_text(),
+        notebook=(d / "prelude_notebook").with_suffix(suffix).read_text(),
+        cell=(d / "prelude_cell").with_suffix(suffix).read_text(),
     )
 
 
@@ -43,7 +43,8 @@ def parse_args(argv: Sequence[str] | None = None) -> Args:
 def main(argv: Sequence[str] | None = None) -> None:
     """Execute main entry point."""
     args = parse_args(argv)
-    preludes = load_preludes(args.preludes)
     for nb_path in args.nb_path.rglob("*.ipynb"):
         nb: Notebook = nbformat.reads(nb_path.read_text(), 4)
+        suffix = nb.metadata["language_info"]["file_extension"]
+        preludes = load_preludes(args.preludes, suffix=suffix)
         execute(nb, cwd=args.nb_path, preludes=preludes)

@@ -17,8 +17,8 @@ nbs_dir = tests_dir / "data/notebooks"
 
 
 @pytest.fixture(scope="session")
-def preludes() -> Preludes:
-    return load_preludes(preludes_dir)
+def preludes_py() -> Preludes:
+    return load_preludes(preludes_dir, suffix=".py")
 
 
 def mk_code_nb(source: str) -> Notebook:
@@ -37,18 +37,18 @@ def mk_code_nb(source: str) -> Notebook:
         ),
     ],
 )
-def test_execute(preludes: Preludes, source: str, expected: str) -> None:
+def test_execute(preludes_py: Preludes, source: str, expected: str) -> None:
     nb = mk_code_nb(source)
-    execute(nb, preludes)
+    execute(nb, preludes_py)
     cell = cast(CodeCell, nb.cells[0])
     stream = cast(Stream, cell.outputs[0])
     assert stream.text.strip() == expected
 
 
-def test_traceback_intact(preludes: Preludes) -> None:
+def test_traceback_intact(preludes_py: Preludes) -> None:
     """Tests that the traceback reports the same line and cell numbers."""
     with pytest.raises(CellExecutionError) as exc_rr:
-        execute(mk_code_nb("1/0"), preludes)
+        execute(mk_code_nb("1/0"), preludes_py)
     with pytest.raises(CellExecutionError) as exc_orig:
         nbclient.execute(mk_code_nb("1/0"))
     assert exc_rr.value.traceback == exc_orig.value.traceback

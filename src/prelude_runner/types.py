@@ -70,7 +70,7 @@ class NotebookMetadata(TypedDict):
     """Common metadata for all notebooks."""
 
     kernelspec: KernelSpec
-    language_info: dict[str, str]
+    language_info: LanguageInfo
 
 
 class Notebook(Protocol):
