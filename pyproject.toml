@@ -24,6 +24,24 @@ features = ["test"]
 [tool.hatch.envs.test.scripts]
 run = "pytest -vv {args}"
 
+[tool.ruff]
+select = ["ALL"]
+extend-ignore = [
+    "COM812", "ISC001", # Incompatible with formatter
+    "D203", # Use no blank line before class
+    "D213", # Use multiline summary on first line
+    "FIX002", # Comments with “TODO” are OK
+    "TD002", # No need for TODO authors
+]
+allowed-confusables = ["’", "×"]
+[tool.ruff.extend-per-file-ignores]
+"tests/**/*.py" = [
+    "D100", # No module docstrings necessary for tests
+    "D103", # No function docstrings necessary for tests
+    "INP001", # Pytest directories are not packages
+    "S101", # Pytest rewrites asserts
+]
+
 [build-system]
 requires = ["hatchling", "hatch-vcs"]
 build-backend = "hatchling.build"
