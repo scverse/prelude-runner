@@ -19,6 +19,7 @@ test = [
 source = "vcs"
 
 [tool.hatch.envs.test]
+python = "3.12"
 features = ["test"]
 [tool.hatch.envs.test.scripts]
 run = "pytest -vv {args}"

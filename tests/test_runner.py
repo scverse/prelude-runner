@@ -1,3 +1,5 @@
+import shutil
+from contextlib import chdir
 from pathlib import Path
 from typing import TYPE_CHECKING
 
@@ -54,5 +56,8 @@ def test_traceback_intact(preludes: Preludes) -> None:
     assert exc_rr.value.traceback == exc_orig.value.traceback
 
 
-def test_cli() -> None:
-    main([f"--preludes={preludes_dir}", str(nbs_dir)])
+def test_cli(tmp_path: Path) -> None:
+    with chdir(tmp_path):
+        shutil.copytree(nbs_dir, "notebooks")
+        main([f"--preludes={preludes_dir}", "notebooks"])
+        assert Path("notebooks/r.txt").read_text() == "6"
