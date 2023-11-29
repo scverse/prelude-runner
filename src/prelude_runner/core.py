@@ -5,7 +5,6 @@ from typing import Any
 from jupyter_client.manager import KernelManager
 from nbclient import NotebookClient
 from nbclient.util import ensure_async
-from nbformat import NotebookNode
 
 from .types import CodeCell, Notebook
 
@@ -35,13 +34,13 @@ def add_reproducible_hooks(client: NotebookClient, preludes: Preludes) -> None:
 
 
 def execute(
-    nb: NotebookNode,
+    nb: Notebook,
     preludes: Preludes,
     *,
     cwd: Path | None = None,
     km: KernelManager | None = None,
     **kwargs: Any,
-) -> NotebookNode:
+) -> Notebook:
     """Execute a notebook's code, updating outputs within the notebook object."""
     resources = {}
     if cwd is not None:

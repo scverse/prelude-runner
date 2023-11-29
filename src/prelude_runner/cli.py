@@ -1,8 +1,10 @@
 from argparse import ArgumentParser
 from pathlib import Path
 from typing import Protocol
+import nbformat
 
 from .core import Preludes, execute
+from .types import Notebook
 
 
 def load_preludes(d: Path) -> Preludes:
@@ -27,5 +29,6 @@ def parse_args(argv: list[str] | None = None) -> Args:
 def main(argv: list[str] | None = None) -> None:
     args = parse_args(argv)
     preludes = load_preludes(args.preludes)
-    for nb in args.nb_path.rglob("*.ipynb"):
+    for nb_path in args.nb_path.rglob("*.ipynb"):
+        nb: Notebook = nbformat.reads(nb_path.read_text(), 4)
         execute(nb, cwd=args.nb_path, preludes=preludes)
