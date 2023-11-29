@@ -3,13 +3,15 @@ from __future__ import annotations
 
 from argparse import ArgumentParser
 from pathlib import Path
-from typing import TYPE_CHECKING, Protocol, Sequence
+from typing import TYPE_CHECKING, Protocol
 
 import nbformat
 
 from .core import Preludes, execute
 
 if TYPE_CHECKING:
+    from collections.abc import Sequence
+
     from .types import Notebook
 
 
