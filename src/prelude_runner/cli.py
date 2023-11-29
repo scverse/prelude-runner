@@ -1,6 +1,7 @@
 from argparse import ArgumentParser
 from pathlib import Path
 from typing import Protocol
+
 import nbformat
 
 from .core import Preludes, execute
