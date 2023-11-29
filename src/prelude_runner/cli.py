@@ -17,10 +17,14 @@ if TYPE_CHECKING:
 
 def load_preludes(d: Path, *, suffix: str) -> Preludes:
     """Load prelude code from config directory."""
-    return Preludes(
-        notebook=(d / "prelude_notebook").with_suffix(suffix).read_text(),
-        cell=(d / "prelude_cell").with_suffix(suffix).read_text(),
+    paths = {p: (d / f"prelude_{p}").with_suffix(suffix) for p in ("notebook", "cell")}
+    notebook, cell = (
+        path.read_text() if path.is_file() else None for path in paths.values()
     )
+    if notebook is None and cell is None:
+        msg = f"No prelude(s) with {suffix=} found in {d}"
+        raise FileNotFoundError(msg)
+    return Preludes(notebook=notebook, cell=cell)
 
 
 class Args(Protocol):

@@ -58,4 +58,4 @@ def test_cli(tmp_path: Path) -> None:
     with chdir(tmp_path):
         shutil.copytree(nbs_dir, "notebooks")
         main([f"--preludes={preludes_dir}", "notebooks"])
-        assert Path("notebooks/r.txt").read_text() == "6"
+        assert Path("notebooks/int.txt").read_text() == "6"
