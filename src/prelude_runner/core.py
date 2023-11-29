@@ -36,14 +36,19 @@ def add_prelude_hooks(client: NotebookClient, preludes: Preludes) -> None:
             ),
         )
 
-    async def on_notebook_start(notebook: Notebook) -> None:  # noqa: ARG001
-        await execute(preludes.notebook)
+    if preludes.notebook is not None:
 
-    async def on_cell_execute(cell: CodeCell, cell_index: int) -> None:  # noqa: ARG001
-        await execute(preludes.cell)
+        async def on_notebook_start(notebook: Notebook) -> None:  # noqa: ARG001
+            await execute(preludes.notebook)
 
-    client.on_notebook_start = on_notebook_start
-    client.on_cell_execute = on_cell_execute
+        client.on_notebook_start = on_notebook_start
+
+    if preludes.cell is not None:
+
+        async def on_cell_execute(cell: CodeCell, cell_index: int) -> None:  # noqa: ARG001
+            await execute(preludes.cell)
+
+        client.on_cell_execute = on_cell_execute
 
 
 def execute(

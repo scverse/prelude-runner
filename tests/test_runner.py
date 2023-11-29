@@ -1,7 +1,7 @@
 import shutil
 from contextlib import chdir
 from pathlib import Path
-from typing import TYPE_CHECKING
+from typing import cast
 
 import nbclient
 import pytest
@@ -9,9 +9,7 @@ from nbclient.exceptions import CellExecutionError
 from nbformat import v4
 from prelude_runner.cli import load_preludes, main
 from prelude_runner.core import Preludes, execute
-
-if TYPE_CHECKING:
-    from prelude_runner.types import CodeCell, Notebook
+from prelude_runner.types import CodeCell, Notebook
 
 tests_dir = Path(__file__).parent
 preludes_dir = tests_dir / "data/config"
@@ -44,10 +42,9 @@ def test_execute(preludes: Preludes, code: str, expected: str) -> None:
 def test_traceback_intact(preludes: Preludes) -> None:
     """Tests that the traceback reports the same line and cell numbers."""
 
-    def mk_nb() -> None:
-        cell: CodeCell = v4.new_code_cell(cell_type="code", source="1/0")
-        nb: Notebook = v4.new_notebook(cells=[cell])
-        return nb
+    def mk_nb() -> Notebook:
+        cell = cast(CodeCell, v4.new_code_cell(cell_type="code", source="1/0"))
+        return cast(Notebook, v4.new_notebook(cells=[cell]))
 
     with pytest.raises(CellExecutionError) as exc_rr:
         execute(mk_nb(), preludes)
