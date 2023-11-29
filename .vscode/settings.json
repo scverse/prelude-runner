@@ -12,5 +12,6 @@
     "[jsonc][yaml]": {
         "editor.defaultFormatter": "esbenp.prettier-vscode",
     },
-    "python.analysis.typeCheckingMode": "basic",
+    "python.analysis.typeCheckingMode": "strict",
+    "python.testing.pytestEnabled": true,
 }

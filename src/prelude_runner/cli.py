@@ -15,12 +15,16 @@ if TYPE_CHECKING:
     from .types import Notebook
 
 
-def load_preludes(d: Path) -> Preludes:
+def load_preludes(d: Path, *, suffix: str) -> Preludes:
     """Load prelude code from config directory."""
-    return Preludes(
-        notebook=(d / "prelude_notebook.py").read_text(),
-        cell=(d / "prelude_cell.py").read_text(),
+    paths = {p: (d / f"prelude_{p}").with_suffix(suffix) for p in ("notebook", "cell")}
+    notebook, cell = (
+        path.read_text() if path.is_file() else None for path in paths.values()
     )
+    if notebook is None and cell is None:
+        msg = f"No prelude(s) with {suffix=} found in {d}"
+        raise FileNotFoundError(msg)
+    return Preludes(notebook=notebook, cell=cell)
 
 
 class Args(Protocol):
@@ -43,7 +47,8 @@ def parse_args(argv: Sequence[str] | None = None) -> Args:
 def main(argv: Sequence[str] | None = None) -> None:
     """Execute main entry point."""
     args = parse_args(argv)
-    preludes = load_preludes(args.preludes)
     for nb_path in args.nb_path.rglob("*.ipynb"):
         nb: Notebook = nbformat.reads(nb_path.read_text(), 4)
+        suffix = nb.metadata["language_info"]["file_extension"]
+        preludes = load_preludes(args.preludes, suffix=suffix)
         execute(nb, cwd=args.nb_path, preludes=preludes)

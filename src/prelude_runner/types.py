@@ -31,7 +31,7 @@ class Output(Protocol):
     data: dict[str, str]
 
 
-class Stream(Protocol):
+class Stream(Output, Protocol):
     """One type of output from a code cell."""
 
     output_type: Literal["stream"]
@@ -39,7 +39,7 @@ class Stream(Protocol):
     text: str
 
 
-class CodeCell(Cell):
+class CodeCell(Cell, Protocol):
     """A code cell."""
 
     cell_type: Literal["code"]
@@ -47,10 +47,30 @@ class CodeCell(Cell):
     outputs: list[Stream | Any]
 
 
+class KernelSpec(TypedDict):
+    """Kernel specification metadata."""
+
+    name: str
+    language: str
+    display_name: str
+
+
+class LanguageInfo(TypedDict):
+    """Language metadata."""
+
+    name: str
+    version: str
+    mimetype: str
+    file_extension: str
+    codemirror_mode: dict[str, str]
+    pygments_lexer: str
+
+
 class NotebookMetadata(TypedDict):
     """Common metadata for all notebooks."""
 
-    language_info: dict[str, str]
+    kernelspec: KernelSpec
+    language_info: LanguageInfo
 
 
 class Notebook(Protocol):
