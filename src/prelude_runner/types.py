@@ -1,4 +1,5 @@
 """Types more specific than NotebookNode."""
+
 from __future__ import annotations
 
 from typing import Any, Literal, Protocol, TypedDict
