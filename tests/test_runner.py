@@ -7,6 +7,7 @@ import nbclient
 import pytest
 from nbclient.exceptions import CellExecutionError
 from nbformat import v4
+
 from prelude_runner.cli import load_preludes, main
 from prelude_runner.core import Preludes, execute
 from prelude_runner.types import CodeCell, Notebook, Stream
