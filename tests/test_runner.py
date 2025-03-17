@@ -23,8 +23,8 @@ def preludes_py() -> Preludes:
 
 
 def mk_code_nb(source: str) -> Notebook:
-    cell = cast(CodeCell, v4.new_code_cell(cell_type="code", source=source))
-    return cast(Notebook, v4.new_notebook(cells=[cell]))
+    cell = cast("CodeCell", v4.new_code_cell(cell_type="code", source=source))
+    return cast("Notebook", v4.new_notebook(cells=[cell]))
 
 
 @pytest.mark.parametrize(
@@ -41,8 +41,8 @@ def mk_code_nb(source: str) -> Notebook:
 def test_execute(preludes_py: Preludes, source: str, expected: str) -> None:
     nb = mk_code_nb(source)
     execute(nb, preludes_py)
-    cell = cast(CodeCell, nb.cells[0])
-    stream = cast(Stream, cell.outputs[0])
+    cell = cast("CodeCell", nb.cells[0])
+    stream = cast("Stream", cell.outputs[0])
     assert stream.text.strip() == expected
 
 
