@@ -1,5 +1,6 @@
 [project]
 name = "prelude-runner"
+license = "Apache-2.0"
 dynamic = ["version"]
 requires-python = ">=3.11"
 dependencies = ["nbclient"]
@@ -29,6 +30,7 @@ run = "pytest -vv {args}"
 select = ["ALL"]
 extend-ignore = [
     "COM812", "ISC001", # Incompatible with formatter
+    "CPY001", # No need for copyright notice with Apache 2.0 license
     "D203", # Use no blank line before class
     "D213", # Use multiline summary on first line
     "FIX002", # Comments with “TODO” are OK
