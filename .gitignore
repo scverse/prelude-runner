@@ -14,3 +14,6 @@ __pycache__/
 
 # Virtual environments
 *venv/
+
+# prettier’s cache (pre-commit hook)
+node_modules/
